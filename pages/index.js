@@ -16,14 +16,16 @@ const Home = () => {
 
     }
     const textureLoader = new THREE.TextureLoader(loadingManager)
-    
+
     const matCapTexture = textureLoader.load('textures/matcaps/8.png')
     const gradientTextures = textureLoader.load('textures/gradients/3.jpg')
     gradientTextures.minFilter = THREE.NearestFilter
     gradientTextures.magFilter = THREE.NearestFilter
 
     const cubeTextureLoader = new THREE.CubeTextureLoader()
-    
+    //Lights
+
+
     //Font
     const fontLoader = new FontLoader()
     fontLoader.load(
@@ -32,7 +34,7 @@ const Home = () => {
 
         const textGeometry = new TextGeometry
           (
-            "Maaz Asim",
+            "HyperFlex Core Under Construction",
             {
               font,
               size: 0.5,
@@ -46,15 +48,26 @@ const Home = () => {
 
             }
           )
-    
+
+        // const pointLight = new THREE.PointLight('white', 0.5)
         textGeometry.center()
         const material = new THREE.MeshMatcapMaterial()
+        material.color = new THREE.Color('orange')
         material.matcap = matCapTexture
         const text = new THREE.Mesh(textGeometry, material)
         scene.add(text)
+        // const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.12)
+        // scene.add(ambientLight)
 
-        const donutGeometry = new THREE.TorusBufferGeometry(0.3, 0.2, 20, 45)
-        const donutMaterial = new THREE.MeshMatcapMaterial({ matcap: matCapTexture })
+
+        // const directionalLight = new THREE.DirectionalLight('#b9d5ff', 0.12)
+        // directionalLight.position.x = 5;
+        // directionalLight.position.y = 5;
+        // directionalLight.position.z = -2;
+        // scene.add(directionalLight)
+
+        const donutGeometry = new THREE.SphereBufferGeometry(0.3, 0.2, 20, 45)
+        const donutMaterial = new THREE.MeshMatcapMaterial({ color: 'orange', matcap: matCapTexture })
 
         for (let i = 0; i < 200; i++) {
           const donut = new THREE.Mesh(donutGeometry, donutMaterial)
@@ -101,12 +114,14 @@ const Home = () => {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(size.width, size.height);
     renderer.setPixelRatio(Math.min(2, window.devicePixelRatio))
-    
+    renderer.setClearColor(0xffffff)
+
 
     mountRef.current.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true;
+    controls.autoRotate = true
 
     //Detect Double Click
     window.addEventListener('dblclick', () => {
@@ -126,6 +141,7 @@ const Home = () => {
     const clock = new THREE.Clock()
     //Animation
     const tick = () => {
+      //animate camera
       //Time
       const elapsedTime = clock.getElapsedTime()
       //Render
@@ -141,9 +157,18 @@ const Home = () => {
   }, []);
 
   return (
-    <div ref={mountRef}>
+    <>
+      <div ref={mountRef}>
+        <div className="absolute top-10 left-10">
 
-    </div>
+        <a href="#" className="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hold and drag objects to play around</h5>
+          <p className="font-normal text-gray-700 dark:text-gray-400">the full website is coming out soon.</p>
+        </a>
+        </div>
+
+      </div>
+    </>
   );
 }
 
